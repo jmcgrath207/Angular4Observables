@@ -1,7 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {Observable} from 'rxjs/Observable';
 import 'rxjs';
 import {Observer} from 'rxjs/Observer';
+import {Subscription} from 'rxjs/Subscription';
 
 
 @Component({
@@ -9,17 +10,21 @@ import {Observer} from 'rxjs/Observer';
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.css']
 })
-export class HomeComponent implements OnInit {
+export class HomeComponent implements OnInit, OnDestroy {
+
+  numbersObsSubscription: Subscription;
+  customObsSubscription: Subscription;
+
 
   constructor() { }
 
   ngOnInit() {
-/*    const myNumber = Observable.interval(1000);
-    myNumber.subscribe(
+    const myNumber = Observable.interval(1000);
+    this.numbersObsSubscription = myNumber.subscribe(
       (number: number) => {
         console.log(number);
       }
-    );*/
+    );
 
   const myObservable = Observable.create(
     (observer: Observer<string>) => {
@@ -38,7 +43,7 @@ export class HomeComponent implements OnInit {
       }, 6000);
     });
 
-  myObservable.subscribe(
+    this.customObsSubscription = myObservable.subscribe(
     (data: string) => { console.log(data); },
     (error: string) => { console.log(error); },
     () => { console.log('completed'); }
@@ -46,5 +51,11 @@ export class HomeComponent implements OnInit {
 
 
   }
+
+  ngOnDestroy() {
+    this.numbersObsSubscription.unsubscribe();
+    this.customObsSubscription.unsubscribe();
+  }
+
 
 }
