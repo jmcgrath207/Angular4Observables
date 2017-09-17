@@ -16,6 +16,11 @@ export class UserComponent implements OnInit {
       .subscribe(
         (params: Params) => {
           this.id = +params['id'];
+        }, () => {
+
+        },
+        () => {
+
         }
       );
   }
